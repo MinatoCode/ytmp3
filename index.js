@@ -15,21 +15,19 @@ export default async function handler(req, res) {
   try {
     const data = await youtube(url);
 
-    if (!data || data.status === false || !Array.isArray(data.audio) || data.audio.length === 0) {
+    if (!data || data.status === false || !data.mp3) {
       return res.status(400).json({
         success: false,
         author: "minato",
         download_url: null,
-        message: data?.message || "Failed to fetch audio"
+        message: data?.message || "Failed to fetch MP3"
       });
     }
-
-    const mp3Url = data.audio[0].url; // first audio stream
 
     return res.status(200).json({
       success: true,
       author: "minato",
-      download_url: mp3Url
+      download_url: data.mp3 // ready-to-download MP3 URL
     });
 
   } catch (err) {
@@ -41,5 +39,4 @@ export default async function handler(req, res) {
       message: "Internal server error"
     });
   }
-  }
-                                
+}
