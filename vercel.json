@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "index.js",
+      "src": "index.py",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/ytmp3",
-      "dest": "index.js"
+      "dest": "index.py"
     }
   ]
 }
