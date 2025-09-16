@@ -5,13 +5,14 @@ import yt_dlp
 
 app = FastAPI()
 
-DOWNLOAD_DIR = "downloads"
+# Use /tmp because Vercel is read-only except /tmp
+DOWNLOAD_DIR = "/tmp"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 
 def download_youtube_mp3(url: str) -> str:
     """
-    Download a YouTube video as MP3 and return the file path.
+    Download YouTube video as MP3 and return the file path
     """
     ydl_opts = {
         "format": "bestaudio/best",
@@ -41,14 +42,15 @@ def download_youtube_mp3(url: str) -> str:
 @app.get("/api/ytmp3")
 def api_ytmp3(url: str = Query(..., description="YouTube video URL")):
     """
-    Download YouTube video as MP3 and return the file.
-    Example: /api/ytmp3?url=https://youtube.com/watch?v=XXXX
+    Download YouTube video as MP3 and trigger auto-download in browser
     """
     mp3_path = download_youtube_mp3(url)
-    return FileResponse(mp3_path, media_type="audio/mpeg", filename=os.path.basename(mp3_path))
 
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-  
+    # FileResponse with headers to force download
+    return FileResponse(
+        mp3_path,
+        media_type="audio/mpeg",
+        filename=os.path.basename(mp3_path),
+        headers={"Content-Disposition": f'attachment; filename="{os.path.basename(mp3_path)}"'}
+    )
+, detail=str(e))
