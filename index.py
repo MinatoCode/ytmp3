@@ -1,4 +1,4 @@
-import os
+                import os
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 import yt_dlp
@@ -52,5 +52,5 @@ def api_ytmp3(url: str = Query(..., description="YouTube video URL")):
         media_type="audio/mpeg",
         filename=os.path.basename(mp3_path),
         headers={"Content-Disposition": f'attachment; filename="{os.path.basename(mp3_path)}"'}
-    )
-, detail=str(e))
+        )
+    
